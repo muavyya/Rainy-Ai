@@ -11,15 +11,29 @@ class ChatRepository(context: Context) {
 
     private val dao: ChatDao = AppDatabase.get(context).chatDao()
     private val lock = Mutex()
+
+    @Volatile
     private var currentId: Long? = null
 
     private fun MessageEntity.toChat() = ChatMessage(id, isUser, text, timestamp)
+
+    fun currentConversationId(): Long? = currentId
 
     /** Loads the most recent conversation (or an empty list) and makes it current. */
     suspend fun loadLatest(): List<ChatMessage> = lock.withLock {
         val latest = dao.latestConversation()
         currentId = latest?.id
         if (latest == null) emptyList() else dao.messagesFor(latest.id).map { it.toChat() }
+    }
+
+    suspend fun listConversations(): List<ConversationEntity> = lock.withLock {
+        dao.allConversations()
+    }
+
+    /** Makes an existing conversation current and returns its messages. */
+    suspend fun open(id: Long): List<ChatMessage> = lock.withLock {
+        currentId = id
+        dao.messagesFor(id).map { it.toChat() }
     }
 
     /** Starts a fresh chat. The row is created lazily on the first message. */
@@ -53,6 +67,12 @@ class ChatRepository(context: Context) {
     }
 
     suspend fun deleteMessage(id: Long) = lock.withLock { dao.deleteMessage(id) }
+
+    suspend fun deleteConversation(id: Long) = lock.withLock {
+        dao.clearMessages(id)
+        dao.deleteConversation(id)
+        if (currentId == id) currentId = null
+    }
 
     /** Privacy control: wipes every conversation and message. */
     suspend fun deleteAll() = lock.withLock {

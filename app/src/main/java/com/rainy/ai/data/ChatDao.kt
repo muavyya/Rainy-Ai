@@ -15,6 +15,9 @@ interface ChatDao {
     @Query("SELECT * FROM conversations ORDER BY updatedAt DESC LIMIT 1")
     suspend fun latestConversation(): ConversationEntity?
 
+    @Query("SELECT * FROM conversations ORDER BY updatedAt DESC")
+    suspend fun allConversations(): List<ConversationEntity>
+
     @Query("SELECT * FROM messages WHERE conversationId = :id ORDER BY timestamp ASC, id ASC")
     suspend fun messagesFor(id: Long): List<MessageEntity>
 
@@ -29,6 +32,9 @@ interface ChatDao {
 
     @Query("DELETE FROM messages WHERE id = :id")
     suspend fun deleteMessage(id: Long)
+
+    @Query("DELETE FROM conversations WHERE id = :id")
+    suspend fun deleteConversation(id: Long)
 
     @Query("DELETE FROM conversations")
     suspend fun deleteAll()
