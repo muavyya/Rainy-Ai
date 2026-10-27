@@ -29,7 +29,7 @@ class SecureSettings(context: Context) {
         set(value) { prefs.edit().putString(KEY_MODEL, value.trim()).apply() }
 
     companion object {
-        const val DEFAULT_MODEL = "gemini-2.5-flash"
+        const val DEFAULT_MODEL = "gemini-3.8-flash"
         private const val KEY_API = "api_key"
         private const val KEY_MODEL = "model"
     }
