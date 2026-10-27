@@ -4,10 +4,16 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Typography
 import androidx.compose.material3.darkColorScheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
+import com.rainy.ai.ui.theme.LocalRainyPalette
+import com.rainy.ai.ui.theme.RainyPalette
+
+// RAINY_STAGE1
+private val RainyPaletteDefault = RainyPalette()
 
 private val RainyDark = darkColorScheme(
     primary = Color(0xFF8BB4D4),
@@ -42,5 +48,7 @@ private val RainyTypography = Typography(
 
 @Composable
 fun RainyTheme(content: @Composable () -> Unit) {
-    MaterialTheme(colorScheme = RainyDark, typography = RainyTypography, content = content)
+    CompositionLocalProvider(LocalRainyPalette provides RainyPaletteDefault) {
+        MaterialTheme(colorScheme = RainyDark, typography = RainyTypography, content = content)
+    }
 }
