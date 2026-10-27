@@ -3,3 +3,4 @@ build/
 .idea/
 local.properties
 *.apk
+.rainy_bak/
