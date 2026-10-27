@@ -261,7 +261,7 @@ fun ChatScreen(vm: ChatViewModel, onOpenSettings: () -> Unit) {
                         }
                     },
                     actions = {
-                        IconButton(onClick = { vm.setTtsEnabled(!vm.ttsEnabled) }) {
+                        IconButton(onClick = { vm.updateTtsEnabled(!vm.ttsEnabled) }) {
                             Icon(
                                 if (vm.ttsEnabled) Icons.Default.VolumeUp else Icons.Default.VolumeOff,
                                 contentDescription = if (vm.ttsEnabled) {

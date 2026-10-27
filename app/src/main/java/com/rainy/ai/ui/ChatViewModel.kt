@@ -325,7 +325,7 @@ class ChatViewModel(app: Application) : AndroidViewModel(app) {
         voiceError = null
     }
 
-    fun setTtsEnabled(on: Boolean) {
+    fun updateTtsEnabled(on: Boolean) {
         ttsEnabled = on
         prefs.edit().putBoolean(KEY_TTS, on).apply()
         if (!on) voice.stopSpeaking()
